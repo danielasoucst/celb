@@ -17,9 +17,14 @@ def delPontuacao(palavras):
 def delStopWords(palavras):
     stopwords = nltk.corpus.stopwords.words('portuguese')
     stopwords.append('www.nead.unama.br')
+    stopwords.append(u'ff')#quadrado estranho
+    stopwords.append(u'\u2014')#underline estranho
+    stopwords.append('\xe2\x80\x94')
+    stopwords.append(u'f\xe9')
     lstSemStop = []
 
     for l in palavras:
+        l = l.encode("utf-8")
         if (l not in stopwords):
             lstSemStop.append(l)
 

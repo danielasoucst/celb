@@ -38,21 +38,24 @@ def createCorpus():
         file.close()
         id+=1
 def trainBase():
-    train_arrays = np.zeros((20, 100))
-    train_labels = np.zeros(20)
+    train_arrays = []
+    train_labels = []
 
-    for i in range(10):
+    for i in range(8):
         prefix_train_pos = 'TRAIN_BAR_' + str(i)
+        train_arrays.append(model.docvecs[prefix_train_pos])
+        train_labels.append(1)
+
+    for i in range(12):
         prefix_train_neg = 'TRAIN_ROM_' + str(i)
-        train_arrays[i] = model[prefix_train_pos]
-        train_arrays[10 + i] = model[prefix_train_neg]
-        train_labels[i] = 1
-        train_labels[10 + i] = 0
+        train_arrays.append(model.docvecs[prefix_train_neg])
+        train_labels.append(0)
+    return train_arrays,train_labels
 
 
 
 '''MAIN'''
-print("Criando corpus")
+'''print("Criando corpus")
 #createCorpus()
 sources = {'classe0.txt':'TRAIN_BAR', 'classe2.txt':'TRAIN_ROM'}
 
@@ -63,8 +66,12 @@ model.build_vocab(sentences.to_array())
 for epoch in range(10):
     model.train(sentences.sentences_perm())
 model.save('./imdb.d2v')
-print model.most_similar('porque')
+print model.most_similar('porque')'''
 #
 model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
-
-#print (model['TRAIN_BAR_0'])
+#print (type(model))
+#train_arrays,train_labels = trainBase()
+#print (model.docvecs['TRAIN_BAR_0'])
+train_arrays, labels_arrays = trainBase()
+print train_arrays
+print labels_arrays

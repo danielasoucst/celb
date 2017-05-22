@@ -3,7 +3,7 @@
 def createArffFile(nameFile,vetFeatures,vetLabels,attLength):
 
     file = open(nameFile+".arff", 'w')
-    file.write("@RELATION segmentation\n")
+    file.write("@RELATION estilo\n")
 
     for k in range(0,attLength):
         file.write("@ATTRIBUTE 'att"+str(k)+"' real\n")

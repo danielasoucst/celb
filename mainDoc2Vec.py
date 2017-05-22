@@ -3,6 +3,7 @@ import os
 import codecs
 import preprocessamento as pre
 import LabeledLineSentence
+import arffGenerator as gen
 import gensim.models.doc2vec as Doc2Vec
 import numpy as np
 
@@ -10,7 +11,7 @@ DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
 DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
 
-classes = [DIR_BARROCO,DIR_ROMANTISMO]
+classes = [DIR_ROMANTISMO,DIR_REALISMO]
 
 def createSentence(lista):
     frase = ""
@@ -42,12 +43,12 @@ def trainBase():
     train_labels = []
 
     for i in range(8):
-        prefix_train_pos = 'TRAIN_BAR_' + str(i)
+        prefix_train_pos = 'TRAIN_ROM_' + str(i)
         train_arrays.append(model.docvecs[prefix_train_pos])
         train_labels.append(1)
 
     for i in range(12):
-        prefix_train_neg = 'TRAIN_ROM_' + str(i)
+        prefix_train_neg = 'TRAIN_REA_' + str(i)
         train_arrays.append(model.docvecs[prefix_train_neg])
         train_labels.append(0)
     return train_arrays,train_labels
@@ -55,10 +56,11 @@ def trainBase():
 
 
 '''MAIN'''
-'''print("Criando corpus")
-#createCorpus()
-sources = {'classe0.txt':'TRAIN_BAR', 'classe2.txt':'TRAIN_ROM'}
+print("Criando corpus")
+createCorpus()
 
+
+sources = {'classe0.txt':'TRAIN_ROM', 'classe2.txt':'TRAIN_REA'}
 sentences = LabeledLineSentence.LabeledLineSentence(sources)
 model = Doc2Vec.Doc2Vec(min_count=1, window=10, size=100, sample=1e-4, negative=5, workers=8)
 model.build_vocab(sentences.to_array())
@@ -66,7 +68,7 @@ model.build_vocab(sentences.to_array())
 for epoch in range(10):
     model.train(sentences.sentences_perm())
 model.save('./imdb.d2v')
-print model.most_similar('porque')'''
+print model.most_similar('porque')
 #
 model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 #print (type(model))
@@ -75,3 +77,5 @@ model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 train_arrays, labels_arrays = trainBase()
 print train_arrays
 print labels_arrays
+gen.createArffFile('trainBarrocoRomantismo', train_arrays, labels_arrays, len(train_arrays[0]))
+

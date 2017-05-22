@@ -6,10 +6,13 @@ import codecs
 import preprocessamento as pre
 import extratorcaracteristicas as ext
 import arffGenerator as gen
+import chardet
 
 DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
-DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+#DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+
+classes = [DIR_BARROCO,DIR_REALISMO]
 
 def createSentence(lista):
     frase = ""
@@ -18,39 +21,46 @@ def createSentence(lista):
     return frase
 
 def createCorpus():
-    livros = os.listdir(DIR_ROMANTISMO)
-    qtdeLivrosBarroco = len(livros)
-    livros += os.listdir(DIR_REALISMO)
+    id = 0
+    labels = []
     corpus = []
-    k = 0
-    vetLabels = []
-    for livro in livros:
-        if(k<qtdeLivrosBarroco):
-            f = codecs.open(DIR_ROMANTISMO+livro)
-            vetLabels.append(0)
-        else:
-            if(k >= 2*qtdeLivrosBarroco):
-                break
-            f = codecs.open(DIR_REALISMO + livro)
-            vetLabels.append(1)
-        raw = f.read().decode("utf-8")
-        listaResultante = pre.preProcessarTexto(raw, 10)
-        #print(listaResultante)
-        corpus.append(createSentence(listaResultante))
-        k += 1
+    for classe in classes:
+        print("classe", classe)
+        file = open('classe' + str(id) + '.txt', 'w')
 
-    return [corpus,vetLabels]
+        livros = os.listdir(classe)
+        for livro in livros:
+            f = codecs.open(classe + livro)
+            labels.append(id)
+            # print (classe + livro)
+            raw = f.read().decode("utf-8")
+            '''chardet.detect(raw)
+            e = chardet.detect(raw)
+            print e'''
+            listaResultante = pre.preProcessarTexto(raw, 10)
+            # #print(listaResultante)
+
+            frase = createSentence(listaResultante)
+            corpus.append(frase)
+            frase = frase.encode("utf-8")
+
+            # k += 10
+            file.write(frase + "\n")
+        file.close()
+        id += 1
+    return corpus,labels
+
+import nltk
 
 
 '''Main'''
 print("Criando corpus")
-corpus = createCorpus()
-if(corpus!=None):
+corpus,labels = createCorpus()
+if(labels!=None):
     print("Extraindo características")
-    features = ext.extractFeatures(corpus[0])
-    ''''print corpus[1]
+    features = ext.extractFeatures(corpus)
     print(features.shape)
     print(features)
-    print("Gerando arquivo arff")
-    gen.createArffFile('trainBarrocoRealismo',features,corpus[1],features.shape[1])'''
+    #print("Gerando arquivo arff")
+    gen.createArffFile('trainBarrocoRealismo',features,labels,features.shape[1])
 

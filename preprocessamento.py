@@ -1,6 +1,7 @@
 # coding: utf-8
 import nltk
 import string
+import chardet
 import sys
 
 def transMinusculo(tokens):
@@ -14,17 +15,24 @@ def delPontuacao(palavras):
             list.append(i)
     return list
 
-def delStopWords(palavras):
+def delStopWords(palavras): #AS comparações de string são feitas em unicode
     stopwords = nltk.corpus.stopwords.words('portuguese')
-    stopwords.append('www.nead.unama.br')
-    stopwords.append(u'ff')#quadrado estranho
-    stopwords.append(u'\u2014')#underline estranho
-    stopwords.append('\xe2\x80\x94')
-    stopwords.append(u'f\xe9')
     lstSemStop = []
+
+    stopwords.append(u'www.nead.unama.br')
+    stopwords.append(u'...')
+    stopwords.append(u'!...')
+    stopwords.append(u'?...')
+    stopwords.append(u'é')
+    stopwords.append(u'``')
+    stopwords.append(u"''")
+    stopwords.append(u'—')
+    stopwords.append(u'ff')
+    stopwords.append(u'--')
 
     for l in palavras:
         l = l.encode("utf-8")
+        l = unicode(l, "utf-8")
         if (l not in stopwords):
             lstSemStop.append(l)
 
@@ -38,7 +46,8 @@ def preProcessarTexto(txt,qtdeTermos):
 
     lstSemPont = delPontuacao(words)
     lstSemStop = delStopWords(lstSemPont)
-
+    '''for t in lstSemStop:
+        print t'''
     fd = nltk.FreqDist(lstSemStop)
     return fd.most_common(qtdeTermos)
    # return lstSemStop

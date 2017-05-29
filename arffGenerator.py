@@ -1,13 +1,13 @@
 
 
-def createArffFile(nameFile,vetFeatures,vetLabels,attLength):
+def createArffFile(nameFile,vetFeatures,vetLabels,attLength,classes):
 
     file = open(nameFile+".arff", 'w')
     file.write("@RELATION estilo\n")
 
     for k in range(0,attLength):
         file.write("@ATTRIBUTE 'att"+str(k)+"' real\n")
-    file.write("@ATTRIBUTE 'class' {0,1}\n")
+    file.write("@ATTRIBUTE 'class' "+classes+" \n")
     file.write("@DATA\n")
     for i in range(0,len(vetFeatures)):
         for j in range(0,len(vetFeatures[i])):

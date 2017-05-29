@@ -1,7 +1,7 @@
 # coding: utf-8
 import nltk
 import string
-import chardet
+
 import sys
 
 def transMinusculo(tokens):

@@ -11,7 +11,7 @@ DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
 DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
 
-classes = [DIR_BARROCO,DIR_REALISMO]
+classes = [DIR_BARROCO,DIR_REALISMO,DIR_ROMANTISMO]
 
 def createSentence(lista):
     frase = ""
@@ -35,7 +35,6 @@ def createCorpus():
             doc = pre.preProcessarTexto(raw, 10)
             frase = doc.encode("utf-8")
             corpus.append(frase)
-
             labels.append(id)
 
             file.write(frase+"\n")
@@ -56,6 +55,10 @@ def trainBase():
         prefix_train_neg = 'TRAIN_REA_' + str(j)
         train_arrays.append(model.docvecs[prefix_train_neg])
         train_labels.append(1)
+    for k in range(12):
+        prefix_train_neg = 'TRAIN_ROM_' + str(k)
+        train_arrays.append(model.docvecs[prefix_train_neg])
+        train_labels.append(2)
     return train_arrays,train_labels
 
 
@@ -65,7 +68,7 @@ print("Criando corpus")
 createCorpus()
 
 
-sources = {'classe0.txt':'TRAIN_BAR', 'classe1.txt':'TRAIN_REA'}
+sources = {'classe0.txt':'TRAIN_BAR', 'classe1.txt':'TRAIN_REA','classe2.txt':'TRAIN_ROM'}
 sentences = LabeledLineSentence.LabeledLineSentence(sources)
 model = Doc2Vec.Doc2Vec(min_count=5, window=10, size=300, sample=1e-4, negative=5, workers=8)
 model.build_vocab(sentences.to_array())
@@ -82,5 +85,5 @@ model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 train_arrays, labels_arrays = trainBase()
 print train_arrays
 print labels_arrays
-gen.createArffFile('trainBarrocoRealismoDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1}")
+gen.createArffFile('trainBarrocoRealismoRomantismoDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1,2}")
 

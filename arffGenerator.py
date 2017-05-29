@@ -30,6 +30,20 @@ def createArffFile(nameFile,vetFeatures,vetLabels,attLength,classes):
 
     return lstIdFrames'''
 
+def  createArffFile2(nameFile,vetFeatures,vetLabels,classes):
+    file = open(nameFile+".arff", 'w')
+    file.write("@RELATION escolas\n")
+
+
+    file.write("@ATTRIBUTE 'Document' string\n")
+    file.write("@ATTRIBUTE 'class' "+classes+" \n")
+    file.write("@DATA\n")
+
+    for i in range(0,len(vetFeatures)):
+        file.write('"')
+        file.write(str(vetFeatures[i])+'", ')
+        file.write(str(vetLabels[i]) + "\n")
+    file.close()
 
 
 

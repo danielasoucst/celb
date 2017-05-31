@@ -10,8 +10,9 @@ import numpy as np
 DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
 DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+DIR_ARCADISMO = './database/arcadismo/arcadismo-txt/'
 
-classes = [DIR_BARROCO,DIR_REALISMO,DIR_ROMANTISMO]
+classes = [DIR_BARROCO,DIR_ARCADISMO,DIR_REALISMO,DIR_ROMANTISMO]
 
 def createSentence(lista):
     frase = ""
@@ -50,15 +51,19 @@ def trainBase():
         prefix_train_pos = 'TRAIN_BAR_' + str(i)
         train_arrays.append(model.docvecs[prefix_train_pos])
         train_labels.append(0)
+    for l in range(12):
+        prefix_train_pos = 'TRAIN_ARC_' + str(l)
+        train_arrays.append(model.docvecs[prefix_train_pos])
+        train_labels.append(1)
 
     for j in range(13):
         prefix_train_neg = 'TRAIN_REA_' + str(j)
         train_arrays.append(model.docvecs[prefix_train_neg])
-        train_labels.append(1)
+        train_labels.append(2)
     for k in range(12):
         prefix_train_neg = 'TRAIN_ROM_' + str(k)
         train_arrays.append(model.docvecs[prefix_train_neg])
-        train_labels.append(2)
+        train_labels.append(3)
     return train_arrays,train_labels
 
 
@@ -68,9 +73,9 @@ print("Criando corpus")
 createCorpus()
 
 
-sources = {'classe0.txt':'TRAIN_BAR', 'classe1.txt':'TRAIN_REA','classe2.txt':'TRAIN_ROM'}
+sources = {'classe0.txt':'TRAIN_BAR','classe1.txt':'TRAIN_ARC', 'classe2.txt':'TRAIN_REA','classe3.txt':'TRAIN_ROM'}
 sentences = LabeledLineSentence.LabeledLineSentence(sources)
-model = Doc2Vec.Doc2Vec(min_count=5, window=10, size=300, sample=1e-4, negative=5, workers=8)
+model = Doc2Vec.Doc2Vec(min_count=10, window=10, size=400, sample=1e-4, negative=5, workers=8)
 model.build_vocab(sentences.to_array())
 #print len(model.vocab)
 for epoch in range(10):
@@ -83,7 +88,7 @@ model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 #train_arrays,train_labels = trainBase()
 #print (model.docvecs['TRAIN_BAR_0'])
 train_arrays, labels_arrays = trainBase()
-print train_arrays
-print labels_arrays
-gen.createArffFile('trainBarrocoRealismoRomantismoDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1,2}")
+# print train_arrays
+# print labels_arrays
+gen.createArffFile('./testes/barReaRomArcDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1,2,3}")
 

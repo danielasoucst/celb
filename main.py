@@ -11,8 +11,9 @@ import chardet
 DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
 DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+DIR_ARCADISMO = './database/arcadismo/arcadismo-txt/'
 
-classes = [DIR_BARROCO,DIR_REALISMO,DIR_ROMANTISMO]
+classes = [DIR_BARROCO,DIR_ARCADISMO,DIR_REALISMO,DIR_ROMANTISMO]
 QTRAIN = 9
 QTEST = 4
 def createSentence(lista):
@@ -35,10 +36,8 @@ def createCorpus():
             labels.append(id)
             # print (classe + livro)
             raw = f.read().decode("utf-8")
-            '''chardet.detect(raw)
-            e = chardet.detect(raw)
-            print e'''
-            listaResultante = pre.preProcessarTexto(raw, 10)
+
+            listaResultante = pre.preProcessarTexto(raw, 20)
             # #print(listaResultante)
 
             frase = createSentence(listaResultante)
@@ -65,5 +64,5 @@ if(labels!=None):
     features = ext.extractFeatures(corpus)
     print(features.shape)
     #print("Gerando arquivo arff")
-    gen.createArffFile('./testes/BarrocoRealismoRomantismo',features,labels,features.shape[1],"{0,1,2}")
+    gen.createArffFile('./testes/barReaRomArc',features,labels,features.shape[1],"{0,1,2,3}")
 

@@ -10,7 +10,7 @@ import numpy
 from random import shuffle
 
 # classifier
-from sklearn.linear_model import LogisticRegression
+# from sklearn.linear_model import LogisticRegression
 
 class LabeledLineSentence(object):
     def __init__(self, sources):
@@ -30,7 +30,7 @@ class LabeledLineSentence(object):
         for source, prefix in self.sources.items():
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                    print ("aa",prefix + '_%s' % item_no)
+                    # print ("aa",prefix + '_%s' % item_no)
                     yield LabeledSentence.LabeledSentence(utils.to_unicode(line).split(), [prefix + '_%s' % item_no])
 
     def to_array(self):
@@ -38,7 +38,7 @@ class LabeledLineSentence(object):
         for source, prefix in self.sources.items():
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                    print ("e",prefix + '_%s' % item_no)
+                    # print ("e",prefix + '_%s' % item_no)
                     self.sentences.append(LabeledSentence.LabeledSentence(utils.to_unicode(line).split(), [prefix + '_%s' % item_no]))
         for s in self.sentences:
             print s

@@ -58,7 +58,7 @@ def preProcessarTexto(txt,qtdeTermos):
 
 
     # fd = nltk.FreqDist(lstSemStop)
-    # return fd.most_common(qtdeTermos)
+    # print(fd.most_common(qtdeTermos))
     return doc
 
 

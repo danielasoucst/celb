@@ -51,7 +51,7 @@ def trainBase():
         prefix_train_pos = 'TRAIN_BAR_' + str(i)
         train_arrays.append(model.docvecs[prefix_train_pos])
         train_labels.append(0)
-    for l in range(12):
+    for l in range(4):
         prefix_train_pos = 'TRAIN_ARC_' + str(l)
         train_arrays.append(model.docvecs[prefix_train_pos])
         train_labels.append(1)
@@ -69,19 +69,20 @@ def trainBase():
 
 
 '''MAIN'''
-print("Criando corpus")
-createCorpus()
-
-
-sources = {'classe0.txt':'TRAIN_BAR','classe1.txt':'TRAIN_ARC', 'classe2.txt':'TRAIN_REA','classe3.txt':'TRAIN_ROM'}
-sentences = LabeledLineSentence.LabeledLineSentence(sources)
-model = Doc2Vec.Doc2Vec(min_count=10, window=10, size=400, sample=1e-4, negative=5, workers=8)
-model.build_vocab(sentences.to_array())
-#print len(model.vocab)
-for epoch in range(10):
-    model.train(sentences.sentences_perm())
-model.save('./imdb.d2v')
-print model.most_similar('porque')
+# print("Criando corpus")
+# createCorpus()
+#
+#
+# sources = {'classe0.txt':'TRAIN_BAR','classe1.txt':'TRAIN_ARC', 'classe2.txt':'TRAIN_REA','classe3.txt':'TRAIN_ROM'}
+# sentences = LabeledLineSentence.LabeledLineSentence(sources)
+# # model = Doc2Vec.Doc2Vec(min_count=8, window=10, size=400, sample=1e-4, negative=5, workers=8)
+# model = Doc2Vec.Doc2Vec(alpha=0.025, min_alpha=0.025)
+# model.build_vocab(sentences.to_array())
+# #print len(model.vocab)
+# for epoch in range(20):
+#     model.train(sentences.sentences_perm())
+# model.save('./imdb.d2v')
+# print model.most_similar('porque')
 #
 model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 #print (type(model))
@@ -90,5 +91,5 @@ model = Doc2Vec.Doc2Vec.load('./imdb.d2v')
 train_arrays, labels_arrays = trainBase()
 # print train_arrays
 # print labels_arrays
-gen.createArffFile('./testes/barReaRomArcDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1,2,3}")
+gen.createArffFile('barReaRomArcDOC', train_arrays, labels_arrays, len(train_arrays[0]),"{0,1,2,3}")
 

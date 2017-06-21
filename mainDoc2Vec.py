@@ -19,7 +19,7 @@ def createSentence(lista):
     for l in lista:
         frase += l[0]+" "
     return frase
-
+sizeSample = 50
 listQtde = []
 def createCorpus():
     id=0
@@ -35,13 +35,22 @@ def createCorpus():
             #print (classe + livro)
             raw = f.read().decode("utf-8")
             doc = pre.preProcessarTexto(raw, 10)
-            for part in doc:
-                qtde+=1
-                frase = part.encode("utf-8")
-                corpus.append(frase)
-                labels.append(id)
+            if(len(doc)>sizeSample):
+                for k in range (0,sizeSample):
+                    qtde+=1
+                    frase = doc[k].encode("utf-8")
+                    corpus.append(frase)
+                    labels.append(id)
 
-                file.write(frase+"\n")
+                    file.write(frase+"\n")
+            else:
+                for k in range (0,len(doc)):
+                    qtde+=1
+                    frase = doc[k].encode("utf-8")
+                    corpus.append(frase)
+                    labels.append(id)
+
+                    file.write(frase+"\n")
         file.close()
         listQtde.append(qtde)
         id+=1

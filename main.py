@@ -10,10 +10,12 @@ import chardet
 
 DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
-#DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
+DIR_ARCADISMO = './database/arcadismo/arcadismo-txt/'
 
-classes = [DIR_BARROCO,DIR_REALISMO]
-
+classes = [DIR_BARROCO,DIR_ARCADISMO,DIR_REALISMO,DIR_ROMANTISMO]
+QTRAIN = 9
+QTEST = 4
 def createSentence(lista):
     frase = ""
     for l in lista:
@@ -27,16 +29,14 @@ def createCorpus():
     for classe in classes:
         print("classe", classe)
         file = open('classe' + str(id) + '.txt', 'w')
-
+        if(file!=None): print ("criou arquivo...")
         livros = os.listdir(classe)
         for livro in livros:
             f = codecs.open(classe + livro)
             labels.append(id)
             # print (classe + livro)
             raw = f.read().decode("utf-8")
-            '''chardet.detect(raw)
-            e = chardet.detect(raw)
-            print e'''
+
             listaResultante = pre.preProcessarTexto(raw, 20)
             # #print(listaResultante)
 
@@ -56,11 +56,13 @@ import nltk
 '''Main'''
 print("Criando corpus")
 corpus,labels = createCorpus()
+print (len(corpus),len(labels))
+
+
 if(labels!=None):
-    print("Extraindo características")
+    print("Extraindo características pra treino")
     features = ext.extractFeatures(corpus)
     print(features.shape)
-    print(features)
     #print("Gerando arquivo arff")
-    gen.createArffFile('trainBarrocoRealismo',features,labels,features.shape[1])
+    gen.createArffFile('./testes/barReaRomArc',features,labels,features.shape[1],"{0,1,2,3}")
 

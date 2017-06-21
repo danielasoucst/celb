@@ -47,18 +47,25 @@ def preProcessarTexto(txt,qtdeTermos):
 
     lstSemPont = delPontuacao(words)
     lstSemStop = delStopWords(lstSemPont)
+    mat = []
 
-    doc = ""
+    for i in range(0,len(lstSemStop),100):
 
-    for i in range(0,len(lstSemStop)):
-        doc +=lstSemStop[i]
-        if(i<len(lstSemStop)-1):
+        # print i,len(lstSemStop)/100
+        # part = lstSemStop[i:i + 100]
+        # print len(part)
+        part = lstSemStop[i:i + 100]
+        doc = ""
+        for w in part:
+            doc += w
             doc += " "
+        mat.append(doc)
 
 
 
     # fd = nltk.FreqDist(lstSemStop)
     # print(fd.most_common(qtdeTermos))
-    return doc
+
+    return mat
 
 

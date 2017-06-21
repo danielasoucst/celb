@@ -40,8 +40,8 @@ class LabeledLineSentence(object):
                 for item_no, line in enumerate(fin):
                     # print ("e",prefix + '_%s' % item_no)
                     self.sentences.append(LabeledSentence.LabeledSentence(utils.to_unicode(line).split(), [prefix + '_%s' % item_no]))
-        for s in self.sentences:
-            print s
+        # for s in self.sentences:
+        #     print s
         return self.sentences
 
     def sentences_perm(self):

@@ -46,13 +46,13 @@ def preProcessarTexto(txt,qtdeTermos):
 
     lstSemPont = delPontuacao(words)
     lstSemStop = delStopWords(lstSemPont)
-    '''for t in lstSemStop:
-        print t'''
+
+    qtdeTermos = int(len(lstSemStop)*0.2)
 
     fd = nltk.FreqDist(lstSemStop)
     most = fd.most_common(qtdeTermos)
-    # for t in most:
-    #     print ("ii", t)
+    # # for t in most:
+    # #     print ("ii", t)
 
     return most
    # return lstSemStop

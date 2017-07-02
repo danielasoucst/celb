@@ -17,7 +17,7 @@ def extractFeatures(corpus):
                                  tokenizer=None, \
                                  preprocessor=None, \
                                  stop_words=None, \
-                                 max_features=5000)
+                                 max_features=1000)
     train_data_features = vectorizer.fit_transform(corpus)
     train_data_features = train_data_features.toarray()
     vocab = vectorizer.get_feature_names()

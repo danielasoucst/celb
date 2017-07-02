@@ -1,3 +1,11 @@
+
+'''
+Sistemas Inteligentes
+Alunos: Daniela e Anderson
+Descrição: main.py => extrai características com BOW
+mainDoC2Vec => extrai características com doc2vec
+'''
+
 # coding: utf-8
 import os
 import codecs
@@ -91,7 +99,7 @@ sentences = LabeledLineSentence.LabeledLineSentence(sources)
 model = Doc2Vec.Doc2Vec(min_count=5, window=10, size=100, sample=1e-4, negative=5, workers=8)
 #model = Doc2Vec.Doc2Vec(alpha=0.025, min_alpha=0.025)
 model.build_vocab(sentences.to_array())
-#print len(model.vocab)
+
 for epoch in range(10):
     model.train(sentences.sentences_perm())
 model.save('./imdb.d2v')

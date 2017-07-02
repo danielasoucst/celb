@@ -1,12 +1,18 @@
+'''
+Sistemas Inteligentes
+Alunos: Daniela e Anderson
+Descrição: main.py => extrai características com BOW
+mainDoC2Vec => extrai características com doc2vec
+'''
+
 # coding: utf-8
-import sys
-import string
 import os
 import codecs
 import preprocessamento as pre
 import extratorcaracteristicas as ext
 import arffGenerator as gen
-import chardet
+
+
 
 DIR_BARROCO = './database/barroco/barroco-txt/'
 DIR_REALISMO = './database/realismo/realismo-txt/'
@@ -14,8 +20,7 @@ DIR_ROMANTISMO = './database/romantismo/romantismo-txt/'
 DIR_ARCADISMO = './database/arcadismo/arcadismo-txt/'
 
 classes = [DIR_BARROCO,DIR_ARCADISMO,DIR_REALISMO,DIR_ROMANTISMO]
-QTRAIN = 9
-QTEST = 4
+
 def createSentence(lista):
     frase = ""
     for l in lista:
